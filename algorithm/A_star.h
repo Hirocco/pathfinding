@@ -5,9 +5,11 @@
 #ifndef PROJECT_CPP_A_STAR_H
 #define PROJECT_CPP_A_STAR_H
 
+#include "../constants.h"
+
 
 class A_star {
-    float start,goal;
+
 };
 
 
