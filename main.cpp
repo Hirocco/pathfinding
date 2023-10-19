@@ -3,7 +3,7 @@
 
 int main() {
 
-    ChessboardGrid grid(1000);
+    ChessboardGrid grid();
     grid.run();
 
     return 0;
