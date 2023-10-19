@@ -9,29 +9,22 @@
 #ifndef PROJECT_CPP_CHESSBOARDGRID_H
 #define PROJECT_CPP_CHESSBOARDGRID_H
 
+#define gridSize 50.f
+#define mapSizeX 20
+#define mapSizeY 20
+#define windowSize 900
 
 class ChessboardGrid {
 public:
-    ChessboardGrid(int mapSize);
+    ChessboardGrid();
     void createGrid();
-    void handleMouseEvents();
+    void handleMouseEvents(sf::Event eventHandler);
     void run();
     void drawGrid();
 
 private:
     sf::RenderWindow window;
-    int mapSize;
-    float gridSize = 50.f;
-    std::vector<std::vector<sf::RectangleShape>> tileMap;
-    std::vector<sf::RectangleShape> tileRow;
-
+    sf::RectangleShape tileMap[mapSizeX][mapSizeY];
 };
 
 #endif //PROJECT_CPP_CHESSBOARDGRID_H
-
-/**
- * DESCRIPTION
- * Description:
-The ChessboardGrid class represents a grid resembling a chessboard in a graphical window using the Simple and Fast Multimedia Library (SFML).
- It provides the functionality to create and display a checkerboard pattern with alternating colors.
- */
