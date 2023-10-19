@@ -1,18 +1,12 @@
 //
 // Created by USER on 16.10.2023.
 //
-#include "SFML/Graphics.hpp"
-#include "SFML/Window.hpp"
-#include <vector>
 
+#include "../constants.h"
 
 #ifndef PROJECT_CPP_CHESSBOARDGRID_H
 #define PROJECT_CPP_CHESSBOARDGRID_H
 
-#define gridSize 50.f
-#define mapSizeX 20
-#define mapSizeY 20
-#define windowSize 900
 
 class ChessboardGrid {
 public:

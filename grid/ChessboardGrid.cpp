@@ -29,25 +29,38 @@ void ChessboardGrid::handleMouseEvents(sf::Event eventHandler) { //teraz to nie 
     //sprawdzamy pozycje myszki
     if (row >= 0 && row < windowSize && col >= 0 && col < windowSize) {
         if ( eventHandler.type == sf::Event::MouseButtonPressed && eventHandler.mouseButton.button == sf::Mouse::Left) {
-            printf("row: %d\n",row);
-            printf("col: %d\n",col);
+
             sf::Vector2f tilePosition = sf::Vector2f (float(col)*gridSize,float(row)*gridSize);
 
             //Jak jestesmy na pozycji i klikniemy to zmien kolor
             if (sf::FloatRect(tilePosition.x, tilePosition.y, gridSize, gridSize).contains(mousePositionView)) {
-                if (tileMap[row][col].getFillColor() == sf::Color::Black) {
+                if (tileMap[row][col].getFillColor() == sf::Color::Black){
                     // Jeśli tile jest czarny i został kliknięty, zmień na biały
                     tileMap[row][col].setFillColor(sf::Color::White);
                     tileMap[row][col].setOutlineColor(sf::Color::Black);
-                    printf("Button pressed black tile!\n");
+
+                    newTileCoordinate.row = row;
+                    newTileCoordinate.col = col;
+                    wallArr.push_back(newTileCoordinate); //zapisujemy pozycje kawałka naszej sciany
+                    printf("dodano row/col: %d %d" , newTileCoordinate.row , newTileCoordinate.col);
+
                 } else {
                     // Jeśli tile jest biały i został kliknięty, zmień na czarny
                     tileMap[row][col].setFillColor(sf::Color::Black);
                     tileMap[row][col].setOutlineColor(sf::Color::Green);
-                    printf("Button pressed white tile!\n");
+                    newTileCoordinate.row = row;
+                    newTileCoordinate.col = col;
+
+                    for(auto iterator = wallArr.begin(); iterator < wallArr.end() ; ++iterator){
+                        if(iterator->col == newTileCoordinate.col && iterator->row == newTileCoordinate.row) {
+                            wallArr.erase(iterator); //znaleziony koordynat jest usuwany
+                            printf("usunieto row/col: %d %d " , newTileCoordinate.row , newTileCoordinate.col);
+                            break;
+                        }
+                    }
+
                 }
             }
-
         }
     }
 }
