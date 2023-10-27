@@ -1,14 +1,16 @@
-#include "grid/ChessboardGrid.h"
+#include "grid/Grid.h"
 
-Coordinate startPoint;
-Coordinate finishPoint;
-Coordinate newTileCoordinate;
-std::vector<Coordinate> wallArr;
+
 
 int main() {
 
-    ChessboardGrid grid;
+    Grid grid;
     grid.run();
 
     return 0;
 }
+
+/*
+ * Zrób kontrole ze mozna ustawic tylko jeden start i finish point
+ * zaczynaj implementowac algorytm djikstry
+ */

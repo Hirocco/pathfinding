@@ -5,6 +5,7 @@
 #ifndef PROJECT_CPP_CONSTANTS_H
 #define PROJECT_CPP_CONSTANTS_H
 #include <vector>
+#include <limits>
 #include "SFML/Graphics.hpp"
 #include "SFML/Window.hpp"
 
@@ -16,6 +17,11 @@
 struct Coordinate{
     int row,col;
 }typedef Coordinate;
+
+struct visitedNode{
+    Coordinate nodeCoordinate;
+    int wage = std::numeric_limits<int>::max(); // Zainicjuj jako nieskończoność, bo nienzamy najkrotszej drogi
+}typedef visitedNode;
 
 extern Coordinate startPoint;
 extern Coordinate finishPoint;
