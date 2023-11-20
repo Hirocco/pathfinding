@@ -17,10 +17,10 @@ public:
     void handleMouseEvents(sf::Event eventHandler);
     void run();
     void drawGrid();
+    void drawPath();
 
 private:
     sf::RenderWindow window;
-    sf::RectangleShape tileMap[mapSizeX][mapSizeY];
 };
 
 #endif //PROJECT_CPP_CHESSBOARDGRID_H

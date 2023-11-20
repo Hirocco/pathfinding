@@ -1,4 +1,6 @@
 #include "Grid.h"
+#include "../algorithm/Djikstra.h"
+
 
 Grid::Grid() /* : size(size), squareSize(squareSize)*/ { //okomentowane, to jest to samo co this->size = size; etc
     window.create(sf::VideoMode(windowSize, windowSize),"Grid"); //okno zawsze bedzie kwadratem mieszczacym wszystkie pola
@@ -14,11 +16,13 @@ void Grid::createGrid() {
         for(int y = 0;y< mapSizeY; y++){
             shape.setPosition(float(y)*gridSize,float(x)*gridSize);
             tileMap[x][y] = shape;
+            //printf("Position X : %f Position Y: %f\n", shape.getPosition().x, shape.getPosition().y);
         }
     }
 }
 
 void Grid::handleMouseEvents(sf::Event eventHandler) {
+    Djikstra alg;
     //zbieramy i mapujemy pozycje
     sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
     sf::Vector2f mousePositionView = window.mapPixelToCoords(mousePosition);
@@ -42,7 +46,7 @@ void Grid::handleMouseEvents(sf::Event eventHandler) {
                     newTileCoordinate.row = row;
                     newTileCoordinate.col = col;
                     wallArr.push_back(newTileCoordinate); //zapisujemy pozycje kawałka naszej sciany
-                    printf("dodano row/col: %d %d\n" , newTileCoordinate.row , newTileCoordinate.col);
+                    printf("\ndodano row/col: %d %d\n" , newTileCoordinate.row , newTileCoordinate.col);
 
                 } else {
                     // Jeśli tile jest biały i został kliknięty, zmień na czarny
@@ -54,13 +58,17 @@ void Grid::handleMouseEvents(sf::Event eventHandler) {
                     for(auto iterator = wallArr.begin(); iterator < wallArr.end() ; ++iterator){
                         if(iterator->col == newTileCoordinate.col && iterator->row == newTileCoordinate.row) {
                             wallArr.erase(iterator); //znaleziony koordynat jest usuwany
-                            printf("usunieto row/col: %d %d \n" , newTileCoordinate.row , newTileCoordinate.col);
+                            printf("\nusunieto row/col: %d %d \n" , newTileCoordinate.row , newTileCoordinate.col);
                             break;
                         }
                     }
-
                 }
             }
+        }
+        if(eventHandler.type == sf::Event::KeyPressed && eventHandler.key.code == sf::Keyboard::Enter){
+            printf("Rozpoczynam algorytm. \n");
+            shortestPathVect = alg.shortestPath();
+
         }
 
         if(eventHandler.type == sf::Event::KeyPressed){
@@ -72,14 +80,14 @@ void Grid::handleMouseEvents(sf::Event eventHandler) {
                     startPoint.col = col;
                     tileMap[row][col].setFillColor(sf::Color::Yellow);
                     tileMap[row][col].setOutlineColor(sf::Color::Blue);
-                    printf("Dodano punkt startowy ze wspolrzednymi: %d %d\n", row,col);
+                    printf("\nDodano punkt startowy ze wspolrzednymi: %d %d\n", row,col);
                 }
                 else if(tileMap[row][col].getFillColor() == sf::Color::Yellow && eventHandler.key.code == sf::Keyboard::S){
                     startPoint.row = -1;
                     startPoint.col = -1;
                     tileMap[row][col].setFillColor(sf::Color::White);
                     tileMap[row][col].setOutlineColor(sf::Color::Black);
-                    printf("Usunięto punkt (aktualne wsporlzedne to -1,-1) startowy ze wspolrzednymi: %d %d\n", row,col);
+                    printf("\nUsunięto punkt (aktualne wsporlzedne to -1,-1) startowy ze wspolrzednymi: %d %d\n", row,col);
                 }
                 //zapisywanie i ustawianie wspolrzednych koncowych
                 if(tileMap[row][col].getFillColor() == sf::Color::White && eventHandler.key.code == sf::Keyboard::F){
@@ -87,13 +95,13 @@ void Grid::handleMouseEvents(sf::Event eventHandler) {
                     finishPoint.col = col;
                     tileMap[row][col].setFillColor(sf::Color::Blue);
                     tileMap[row][col].setOutlineColor(sf::Color::Yellow);
-                    printf("Dodano punkt koncowy ze wspolrzednymi %d %d", row,col);
+                    printf("\nDodano punkt koncowy ze wspolrzednymi %d %d\n", row,col);
                 }else if(tileMap[row][col].getFillColor() == sf::Color::Blue && eventHandler.key.code == sf::Keyboard::F){
                     finishPoint.row = -1;
                     finishPoint.col = -1;
                     tileMap[row][col].setFillColor(sf::Color::White);
                     tileMap[row][col].setOutlineColor(sf::Color::Black);
-                    printf("Usunięto punkt (aktualne wsporlzedne to -1,-1) koncowy ze wspolrzednymi: %d %d\n", row,col);                }
+                    printf("\nUsunięto punkt (aktualne wsporlzedne to -1,-1) koncowy ze wspolrzednymi: %d %d\n", row,col);                }
 
             }
         }
@@ -104,6 +112,21 @@ void Grid::drawGrid() {
     for(int x = 0;x < mapSizeX; x++) {
         for (int y = 0; y < mapSizeY; y++) {
             window.draw(tileMap[x][y]);
+        }
+    }
+}
+void Grid::drawPath() {
+    sf::RectangleShape shape(sf::Vector2f(gridSize,gridSize)); // gridSize jest 50.f
+    shape.setFillColor(sf::Color::Red); // Set the circle color
+    shape.setOutlineColor(sf::Color::Blue);
+    shape.setOutlineThickness(2.f);
+    if(!shortestPathVect.empty()) {
+        for (int x = 0; x < mapSizeX; x++) {
+            for (int y = 0; y < mapSizeY; y++) {
+                shape.setPosition(float(shortestPathVect[x][y].row) * gridSize,
+                                  float(shortestPathVect[x][y].col) * gridSize);
+                window.draw(shape);
+            }
         }
     }
 }
@@ -122,8 +145,11 @@ void Grid::run() {
         }
         window.clear(sf::Color::Black);
         drawGrid();
+        drawPath();
         window.display(); // Display the window
     }
 }
+
+
 
 
