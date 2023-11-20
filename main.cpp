@@ -1,12 +1,15 @@
 #include "grid/Grid.h"
 
-
+Coordinate startPoint;
+Coordinate finishPoint;
+Coordinate newTileCoordinate;
+std::vector<Coordinate> wallArr;
+sf::RectangleShape tileMap[mapSizeX][mapSizeY];
+std::vector<std::vector<Coordinate>> shortestPathVect;
 
 int main() {
-
     Grid grid;
     grid.run();
-
     return 0;
 }
 

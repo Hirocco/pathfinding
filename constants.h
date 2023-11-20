@@ -8,24 +8,23 @@
 #include <limits>
 #include "SFML/Graphics.hpp"
 #include "SFML/Window.hpp"
+#include <queue>
 
 #define mapSizeX 20
 #define mapSizeY 20
-#define gridSize 50.f
+#define gridSize 45.f
 #define windowSize 900
 
 struct Coordinate{
     int row,col;
+    int wage = std::numeric_limits<int>::max();
 }typedef Coordinate;
-
-struct visitedNode{
-    Coordinate nodeCoordinate;
-    int wage = std::numeric_limits<int>::max(); // Zainicjuj jako nieskończoność, bo nienzamy najkrotszej drogi
-}typedef visitedNode;
 
 extern Coordinate startPoint;
 extern Coordinate finishPoint;
 extern Coordinate newTileCoordinate;
 extern std::vector<Coordinate> wallArr;
+extern sf::RectangleShape tileMap[mapSizeX][mapSizeY];
+extern std::vector<std::vector<Coordinate>> shortestPathVect;
 
 #endif //PROJECT_CPP_CONSTANTS_H
