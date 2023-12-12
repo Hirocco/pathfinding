@@ -1,5 +1,6 @@
 #include "Grid.h"
 #include "../algorithm/Djikstra.h"
+#include "../algorithm/BFS.h"
 
 
 Grid::Grid() /* : size(size), squareSize(squareSize)*/ { //okomentowane, to jest to samo co this->size = size; etc
@@ -23,6 +24,7 @@ void Grid::createGrid() {
 
 void Grid::handleMouseEvents(sf::Event eventHandler) {
     Djikstra alg;
+    BFS bfs_alg;
     //zbieramy i mapujemy pozycje
     sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
     sf::Vector2f mousePositionView = window.mapPixelToCoords(mousePosition);
@@ -65,10 +67,14 @@ void Grid::handleMouseEvents(sf::Event eventHandler) {
                 }
             }
         }
-        if(eventHandler.type == sf::Event::KeyPressed && eventHandler.key.code == sf::Keyboard::Enter){
-            printf("Rozpoczynam algorytm. \n");
+        if(eventHandler.type == sf::Event::KeyPressed && eventHandler.key.code == sf::Keyboard::D){
+            printf("Rozpoczynam algorytm Djisktry. \n");
             shortestPathVect = alg.shortestPath();
-
+            shortestPathVect = bfs_alg.BFS_alg();
+        }
+        if(eventHandler.type == sf::Event::KeyPressed && eventHandler.key.code == sf::Keyboard::B){
+            printf("Rozpoczynam algorytm BFS. \n");
+            shortestPathVect = bfs_alg.BFS_alg();
         }
 
         if(eventHandler.type == sf::Event::KeyPressed){
@@ -117,17 +123,24 @@ void Grid::drawGrid() {
 }
 void Grid::drawPath() {
     sf::RectangleShape shape(sf::Vector2f(gridSize,gridSize)); // gridSize jest 50.f
-    shape.setFillColor(sf::Color::Red); // Set the circle color
-    shape.setOutlineColor(sf::Color::Blue);
+    shape.setFillColor(sf::Color::Green); // Set the circle color
     shape.setOutlineThickness(2.f);
     if(!shortestPathVect.empty()) {
-        for (int x = 0; x < mapSizeX; x++) {
-            for (int y = 0; y < mapSizeY; y++) {
-                shape.setPosition(float(shortestPathVect[x][y].row) * gridSize,
-                                  float(shortestPathVect[x][y].col) * gridSize);
+        for (auto & x : shortestPathVect) {
+                shape.setPosition(float(x.col) * gridSize,
+                                  float(x.row) * gridSize);
                 window.draw(shape);
-            }
         }
+
+        shape.setFillColor(sf::Color::Yellow);
+        shape.setPosition(float(shortestPathVect[0].col)*gridSize,
+                          float(shortestPathVect[0].row)*gridSize);
+        window.draw(shape);
+        shape.setFillColor(sf::Color::Blue);
+        shape.setPosition(float(shortestPathVect[shortestPathVect.size()-1].col)*gridSize,
+                          float(shortestPathVect[shortestPathVect.size()-1].row)*gridSize);
+        window.draw(shape);
+
     }
 }
 

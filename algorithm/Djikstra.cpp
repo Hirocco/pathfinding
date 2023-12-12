@@ -11,7 +11,13 @@
  * Przeczyścić kod by sie nie powtarzał
  */
 
-std::vector<std::vector<Coordinate>> Djikstra::shortestPath() {
+void changeCoords(int &x,int &y, int dx, int dy)
+{
+    x+=dx;
+    y+=dy;
+}
+
+std::vector<Coordinate> Djikstra::shortestPath() {
 
     // Definiujemy wewnętrzny wektor z wartościami 'nieskończoność' - nie wiemy jaki jest dystans na początku do każdego tile'a.
     std::vector<int> innerVector(mapSizeY, std::numeric_limits<int>::max());
@@ -28,14 +34,9 @@ std::vector<std::vector<Coordinate>> Djikstra::shortestPath() {
 
     //wypelnimy danymi -1,-1 ktore potem zmienimy na odpowiednie
     std::vector<Coordinate> uninitializedPath(mapSizeY);
-    std::vector<std::vector<Coordinate>> predecessor(mapSizeX,uninitializedPath);
+    std::vector<Coordinate> predecessor;
 
-    Coordinate invalidCords = {-1,-1};
-    for (int x = 0; x < mapSizeX; ++x) {
-        for (int y = 0; y < mapSizeY; ++y) {
-            predecessor[x][y] = invalidCords;
-        }
-    }
+
     //printf("Predecessor zainicjowany.\n"); dziala
     startPoint.wage = 0;
     pq.emplace(startPoint.wage,startPoint);
@@ -51,42 +52,33 @@ std::vector<std::vector<Coordinate>> Djikstra::shortestPath() {
             for(int dy = -1;dy<=1;dy++){
                 //pomijamy aktualny node
                 if(dx ==0 && dy == 0) continue;
-                int newRow = current.row + dx;
-                int newCol = current.col + dy;
-
-                //sprawdzamy czy nowe kolumny i rzedy sa w zasiegu mapy
+                int newRow = current.row;
+                int newCol = current.col;
+                changeCoords(newRow,newCol,dx,dy);
+                printf("ROW: %d COL: %d \n",newRow,newCol);
                 if(!wallArr.empty())
                 {
-                    for(int i=0;i<wallArr.size();i++) {
-                        if (newRow < mapSizeX && newCol < mapSizeY && newCol >= 0 && newRow >= 0 && newRow != wallArr[i].row && newCol != wallArr[i].col) {
-                            //zwiekszamy dystanst o 1 poniewaz poczynilismy jeden krok w jakas strone
-                            int newDistance = current.wage + 1;
-
-                            if (newDistance < distance[newRow][newCol]) {
-                                //distance update
-                                distance[newRow][newCol] = newDistance;
-
-                                //update predecessora
-                                predecessor[newRow][newCol] = current;
-                                //dodajemy sasiada
-                                pq.emplace(newDistance, Coordinate{newRow, newCol, newDistance});
-                            }
+                    bool isWall = false;
+                    for(auto & i : wallArr) {
+                        if (newRow == i.row && newCol == i.col) {
+                            isWall = true;
                         }
                     }
-                }else{
-                    if (newRow < mapSizeX && newCol < mapSizeY && newCol >= 0 && newRow >= 0 ) {
-                        //zwiekszamy dystanst o 1 poniewaz poczynilismy jeden krok w jakas strone
-                        int newDistance = current.wage + 1;
+                    if (isWall) changeCoords(newRow,newCol,dx,dy);
+                }
 
-                        if (newDistance < distance[newRow][newCol]) {
-                            //distance update
-                            distance[newRow][newCol] = newDistance;
+                //sprawdzamy czy nowe kolumny i rzedy sa w zasiegu mapy
+                if (newRow < mapSizeX && newCol < mapSizeY && newCol >= 0 && newRow >= 0) {
+                    //zwiekszamy dystanst o 1 poniewaz poczynilismy jeden krok w jakas strone
+                    int newDistance = current.wage + 1;
 
-                            //update predecessora
-                            predecessor[newRow][newCol] = current;
-                            //dodajemy sasiada
-                            pq.emplace(newDistance, Coordinate{newRow, newCol, newDistance});
-                        }
+                    if (newDistance < distance[newRow][newCol]) {
+                        //distance update
+                        distance[newRow][newCol] = newDistance;
+                        //update predecessora
+                        predecessor.push_back(current);
+                        //dodajemy sasiada
+                        pq.emplace(newDistance, Coordinate{newRow, newCol, newDistance});
                     }
                 }
 
@@ -94,8 +86,8 @@ std::vector<std::vector<Coordinate>> Djikstra::shortestPath() {
         }
 
     }
-
+    printf("Sciezka znaleziona\n");
+    printf("malowanie...\n");
     return predecessor;
 }
-
 

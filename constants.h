@@ -18,6 +18,10 @@
 struct Coordinate{
     int row,col;
     int wage = std::numeric_limits<int>::max();
+    // Comparison operator for std::find
+    bool operator==(const Coordinate& other) const {
+        return row == other.row && col == other.col;
+    };
 }typedef Coordinate;
 
 extern Coordinate startPoint;
@@ -25,6 +29,6 @@ extern Coordinate finishPoint;
 extern Coordinate newTileCoordinate;
 extern std::vector<Coordinate> wallArr;
 extern sf::RectangleShape tileMap[mapSizeX][mapSizeY];
-extern std::vector<std::vector<Coordinate>> shortestPathVect;
+extern std::vector<Coordinate> shortestPathVect;
 
 #endif //PROJECT_CPP_CONSTANTS_H

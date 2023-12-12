@@ -13,12 +13,7 @@ class Grid;
 class Djikstra {
     friend class Grid;
 private:
-    std::vector<std::vector<Coordinate>> shortestPath();
-    /*
-    komparator do priorytezowania mniejszych dystansów.
-    jest to funktor (obiekt który można wywołać jak funkcje) - wiecej w notatki.txt
-    overload ()
-    */
+    std::vector<Coordinate> shortestPath();
     struct CompareDistance{
         bool operator()(const std::pair<int, Coordinate>& a, const std::pair<int,Coordinate>& b){
             return a.first> b.first;

@@ -1,0 +1,39 @@
+1. **Function Signature**:
+   - Confirm the function signature `std::vector<Coordinate> shortestPath();` in your header file.
+
+2. **Initialize Data Structures**:
+   - Create a 2D vector `distances` to hold distances from the start node, initialized to infinity, except for the start node which should be 0.
+   - Define a priority queue to hold nodes based on their current distance, prioritizing the smallest distances first.
+   - Create a 2D vector `predecessor` to keep track of the path, indicating which node you came from to reach the current node.
+
+3. **Implement Priority Queue Logic**:
+   - Push the start node into the priority queue with a distance of 0.
+   - Implement the main loop that continues as long as the priority queue is not empty, processing nodes by increasing distance.
+
+4. **Processing Nodes**:
+   - While the priority queue is not empty:
+     - Pop the node with the smallest distance from the queue.
+     - If it's the destination node, you can use the `predecessor` vector to reconstruct the path.
+     - For each unvisited neighbor (up, down, left, right):
+       - Calculate the potential new distance (current node's distance + 1).
+       - If the new distance is less than the neighbor's recorded distance in `distances`:
+         - Update the neighbor's distance.
+         - Update the neighbor's `predecessor`.
+         - Add the neighbor to the priority queue.
+
+5. **Reconstruct the Shortest Path**:
+   - Once you reach the finish node, use the `predecessor` vector to backtrack from the finish node to the start node to reconstruct the path.
+   - Push the nodes onto a stack or a vector as you backtrack.
+   - Reverse the order to get the path from start to finish.
+
+6. **Return the Path**:
+   - Return the vector containing the shortest path from the start node to the finish node.
+
+7. **Testing and Validation**:
+   - Test your function with a simple scenario to ensure it's working as expected.
+   - Gradually increase complexity by adding more nodes and obstacles (if applicable).
+   - Validate the correctness of the path returned by visualizing it or comparing it with known results.
+
+8. **Refinement and Optimization**:
+   - After ensuring the correctness, you can look for ways to optimize your code.
+   - Consider edge cases and add error handling where necessary.

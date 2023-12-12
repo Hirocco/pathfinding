@@ -8,9 +8,10 @@
 #define PROJECT_CPP_CHESSBOARDGRID_H
 
 class Djikstra;
-
+class BFS;
 class Grid {
     friend class Djikstra;
+    friend class BFS;
 public:
     Grid();
     void createGrid();

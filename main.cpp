@@ -5,7 +5,7 @@ Coordinate finishPoint;
 Coordinate newTileCoordinate;
 std::vector<Coordinate> wallArr;
 sf::RectangleShape tileMap[mapSizeX][mapSizeY];
-std::vector<std::vector<Coordinate>> shortestPathVect;
+std::vector<Coordinate> shortestPathVect;
 
 int main() {
     Grid grid;
