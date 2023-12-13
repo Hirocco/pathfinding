@@ -6,8 +6,6 @@
 - [Installation](#installation)
 - [Usage](#usage)
 - [Contribution](#contribution)
-- [Credits](#credits)
-- [License](#license)
 
 ## Project Description
 The Pathfinding project is a comprehensive tool for visualizing and understanding various pathfinding algorithms. This project lets you interactively explore how different algorithms work and compare their efficiency in finding the shortest path between two points.
